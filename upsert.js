@@ -93,7 +93,7 @@ async function processData(rows, sourceName) {
         // I-log lang natin ang unang error para sa debugging
         const errorSample = result.body.items.find(item => item.index && item.index.error);
         if (errorSample) {
-          console.error(`⚠️ May error sa batch:`, JSON.stringify(errorSample.index.error, null, 2));
+          console.error(` May error sa batch:`, JSON.stringify(errorSample.index.error, null, 2));
         }
       }
 
@@ -106,25 +106,25 @@ async function processData(rows, sourceName) {
   if (batch.length > 0) {
     await client.bulk({ refresh: true, body: batch });
   }
-  console.log(`✅ Finished ${sourceName}: ${totalProcessed} records processed.`);
+  console.log(` Finished ${sourceName}: ${totalProcessed} records processed.`);
 }
 
 async function run() {
   try {
-    console.log(`🚀 Starting Fresh Sync for: ${INDEX}...`);
+    console.log(` Starting Fresh Sync for: ${INDEX}...`);
 
     // DAGDAG ITO: Buburahin ang lumang index para hindi mag-duplicate ang data
     try {
       await client.indices.delete({ index: INDEX });
-      console.log(`🗑️ Index [${INDEX}] deleted successfully.`);
+      console.log(` Index [${INDEX}] deleted successfully.`);
     } catch (e) {
-      console.log(`ℹ️ Index not found or already deleted, proceeding...`);
+      console.log(` Index not found or already deleted, proceeding...`);
     }
 
     // ... (ituloy ang rest ng code mo dito)
 
     if (fs.existsSync(LOCAL_FILE)) {
-      console.log('📂 Local file found. Reading input.xlsx...');
+      console.log(' Local file found. Reading input.xlsx...');
       const workbook = new ExcelJS.Workbook();
       await workbook.xlsx.readFile(LOCAL_FILE);
       
@@ -138,7 +138,7 @@ async function run() {
         }
       }
     } else {
-      console.log('🌐 Local file not found. Fetching from Google Sheets...');
+      console.log(' Local file not found. Fetching from Google Sheets...');
       const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID, auth);
       await doc.loadInfo();
       
@@ -146,14 +146,14 @@ async function run() {
       for (const name of sheetsToProcess) {
         const sheet = doc.sheetsByTitle[name];
         if (sheet) {
-          console.log(`📖 Loading sheet: ${name}...`);
+          console.log(` Loading sheet: ${name}...`);
           const rows = await sheet.getRows(); 
           const rawRows = [sheet.headerValues, ...rows.map(r => r._rawData)];
           await processData(rawRows, name);
         }
       }
     }
-    console.log("🏁 ALL DATA SYNCED SUCCESSFULLY!");
+    console.log(" ALL DATA SYNCED SUCCESSFULLY!");
   } catch (error) {
     console.error('❌ Final Error Check:', error.message);
   }
