@@ -35,8 +35,8 @@ Because your operational Google Sheets are private, you must explicitly invite t
 The script targets specific spreadsheets using their unique alphanumeric identifiers found directly in the browser URL:
 1. While viewing your Google Sheet, look at your browser's address bar.
 2. Highlight and copy the long string of letters and numbers located between `/d/` and `/edit`.
-   * *Example URL:* `https://docs.google.com/spreadsheets/d/1YoF37pKbs_iVFIIDbDbc1ffhJJazEAXQAINzF1ks9sA/edit`
-   * *Your extracted Sheet ID is:* `1YoF37pKbs_iVFIIDbDbc1ffhJJazEAXQAINzF1ks9sA`
+   * *Example URL:* `https://docs.google.com/spreadsheets/d/1YoF37pKbs_XXXXXXXXXXXXXXXXXX`
+   * *Your extracted Sheet ID is:* `1YoF37pKbs_iVFIIDbDbc1ffhJJazEXXXXXXXXXXXXX`
 3. Save this string for your `GOOGLE_SHEET_ID_INPUT` and `GOOGLE_SHEET_ID_OCR` configurations.
 
 #### Step 4: Configure GitHub Repository Secrets
