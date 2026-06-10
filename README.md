@@ -1,4 +1,4 @@
-#  Automated Data Pipeline: Google Sheets to OpenSearch Unified Sync
+#  Automated Data Pipeline: Google Sheets to OpenSearch Unified Sync ![OpenSearch Dashboard](dashboard.png)
 
 An automated data engineering pipeline that synchronizes, normalizes, and reconciles master inventory data and OCR records into an OpenSearch cluster. Built using **Node.js** and orchestrated via **GitHub Actions** for hands-free daily tracking.
 
