@@ -105,14 +105,14 @@ async function processData(rows) {
   if (batch.length > 0) {
     await sendBulk(batch);
   }
-  console.log(`✅ Final Success! Total records handled: ${totalProcessed}`);
+  console.log(` Final Success! Total records handled: ${totalProcessed}`);
 }
 
 async function sendBulk(batch) {
   const response = await client.bulk({ refresh: true, body: batch });
   if (response.errors) {
     const erroredDocuments = response.items.filter(item => item.index && item.index.error);
-    console.error(`❌ Found ${erroredDocuments.length} errors in this batch.`);
+    console.error(` Found ${erroredDocuments.length} errors in this batch.`);
     // Opsyonal: I-log ang detalye ng error
     // console.error(JSON.stringify(erroredDocuments[0].index.error, null, 2));
   }
@@ -120,7 +120,7 @@ async function sendBulk(batch) {
 
 async function run() {
   try {
-    console.log(`🚀 Starting OCR Sync for: ${INDEX}...`);
+    console.log(` Starting OCR Sync for: ${INDEX}...`);
 
     // 1. Delete and Re-create Index (Warning: This wipes existing data)
     try { await client.indices.delete({ index: INDEX }); } catch (e) { console.log("Index not found, skipping delete."); }
@@ -152,18 +152,18 @@ async function run() {
     
     const sheet = doc.sheetsByTitle['OCR']; 
     if (sheet) {
-      console.log(`📖 Reading GSheet tab: OCR...`);
+      console.log(` Reading GSheet tab: OCR...`);
       const rows = await sheet.getRows(); 
       // r._rawData ay array ng cells
       const rawRows = [sheet.headerValues, ...rows.map(r => r._rawData)];
       await processData(rawRows);
     } else {
-      console.error('❌ Error: Tab "OCR" not found!');
+      console.error(' Error: Tab "OCR" not found!');
     }
     
-    console.log("🏁 SYNC COMPLETE!");
+    console.log(" SYNC COMPLETE!");
   } catch (error) {
-    console.error('❌ Critical Error:', error);
+    console.error(' Critical Error:', error);
   }
 }
 
