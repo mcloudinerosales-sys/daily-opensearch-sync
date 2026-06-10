@@ -44,13 +44,13 @@ async function fetchAll(indexName) {
 
     while (hits && hits.length) {
       allDocs.push(...hits.map(h => h._source));
-      process.stdout.write(`   📥 Downloaded ${allDocs.length} records...\r`);
+      process.stdout.write(`    Downloaded ${allDocs.length} records...\r`);
       const scrollRes = await client.scroll({ scroll_id: scrollId, scroll: '10m' });
       scrollId = scrollRes.body._scroll_id;
       hits = scrollRes.body.hits.hits;
     }
-    console.log(`\n✅ Total retrieved: ${allDocs.length}`);
-  } catch (e) { console.error(`❌ Error fetching ${indexName}:`, e.message); }
+    console.log(`\n Total retrieved: ${allDocs.length}`);
+  } catch (e) { console.error(` Error fetching ${indexName}:`, e.message); }
   return allDocs;
 }
 
@@ -129,7 +129,7 @@ async function run() {
     }
 
     // 3. RESET INDEX & APPLY MAPPING
-    console.log(`🗑️  Resetting ${TARGET_INDEX}...`);
+    console.log(`  Resetting ${TARGET_INDEX}...`);
     try { await client.indices.delete({ index: TARGET_INDEX }); } catch (e) {}
     await client.indices.create({
       index: TARGET_INDEX,
@@ -147,7 +147,7 @@ async function run() {
     });
 
     // 4. BULK UPLOAD (BATCHING)
-    console.log(`🚀 Uploading ${finalBatch.length / 2} records...`);
+    console.log(` Uploading ${finalBatch.length / 2} records...`);
     const BATCH_SIZE = 2000;
     for (let i = 0; i < finalBatch.length; i += BATCH_SIZE * 2) {
       const chunk = finalBatch.slice(i, i + BATCH_SIZE * 2);
@@ -155,13 +155,13 @@ async function run() {
       
       if (result.errors) {
         const errorSample = result.items.find(item => item.index && item.index.error);
-        console.error(`❌ Bulk Error:`, JSON.stringify(errorSample.index.error, null, 2));
+        console.error(` Bulk Error:`, JSON.stringify(errorSample.index.error, null, 2));
       }
-      process.stdout.write(`📦 Progress: ${Math.min((i / 2) + BATCH_SIZE, finalBatch.length / 2)} / ${finalBatch.length / 2}\r`);
+      process.stdout.write(` Progress: ${Math.min((i / 2) + BATCH_SIZE, finalBatch.length / 2)} / ${finalBatch.length / 2}\r`);
     }
 
-    console.log(`\n✅ RECONCILIATION COMPLETE!`);
-  } catch (err) { console.error("❌ CRITICAL ERROR:", err); }
+    console.log(`\n RECONCILIATION COMPLETE!`);
+  } catch (err) { console.error(" CRITICAL ERROR:", err); }
 }
 
 run();
